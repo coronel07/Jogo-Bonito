@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú del Juego</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="menu-container">
+        <div class="player-container">
+            <div class="player-section left">
+                <h1>Jugador 1</h1>
+                <div class="player-box-container">
+                    <div class="player-box">
+                        <!-- Mostrar al jugador seleccionado o creado -->
+                    </div>
+                </div>
+                <button class="action-button" onclick="selectPlayer('player1')">Seleccionar</button>
+                <button class="action-button" onclick="createPlayer('player1')">Crear</button>
+                <div class="play-mode">
+                    <button class="mode-button" onclick="selectMode('keyboard')">Teclado</button>
+                    <button class="mode-button" onclick="selectMode('mobile')">Celular</button>
+                </div>
+            </div>
+            <div class="logo-play">
+                <div class="logo">
+                    <!-- Aquí puedes agregar tu logo en forma de óvalo -->
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+                </div>
+                <button class="play-button" onclick="playGame()">Play</button>
+            </div>
+            <div class="player-section right">
+                <h1>Jugador 2</h1>
+                <div class="player-box-container">
+                    <div class="player-box">
+                        <!-- Mostrar al jugador seleccionado o creado -->
+                    </div>
+                </div>
+                <button class="action-button" onclick="selectPlayer('player2')">Seleccionar</button>
+                <button class="action-button" onclick="createPlayer('player2')">Crear</button>
+                <div class="play-mode">
+                    <button class="mode-button" onclick="selectMode('keyboard')">Teclado</button>
+                    <button class="mode-button" onclick="selectMode('mobile')">Celular</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function playGame() {
+            window.location.href = "{{ url_for('game') }}";
+        }
+
+        function selectPlayer(player) {
+            // Lógica para seleccionar un jugador
+        }
+
+        function createPlayer(player) {
+            // Lógica para crear un jugador
+        }
+
+        function selectMode(mode) {
+            // Lógica para seleccionar el modo de juego
+        }
+    </script>
+</body>
+</html>
