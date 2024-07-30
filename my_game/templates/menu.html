@@ -28,7 +28,7 @@
                     <!-- Aquí puedes agregar tu logo en forma de óvalo -->
                     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
                 </div>
-                <button class="play-button" onclick="playGame()">Play</button>
+                <button class="play-button" onclick="playGame()">Jugar</button>
             </div>
             <div class="player-section right">
                 <h1>Jugador 2</h1>
@@ -56,7 +56,7 @@
         }
 
         function createPlayer(player) {
-            // Lógica para crear un jugador
+            window.location.href = `{{ url_for('create_player') }}?player=${player}`;
         }
 
         function selectMode(mode) {
