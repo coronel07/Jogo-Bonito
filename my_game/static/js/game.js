@@ -5,30 +5,47 @@ let player1Score = 0;
 let player2Score = 0;
 let paused = false;
 let pauseButton;1
+let obstaculo1;
+let obstaculo2;
+let obstaculo3;
+let timer = 0;
 
 
 function setup() {
 	new Canvas(850, 500);
 
     // Arcos
-    arco1 = new Sprite(30, 380, 5, 130, 's');
+    arco1 = new Sprite(15, 380, 5, 130, 's');
     arco1.visible = true;
+    arco1.collider = "none"
     arco2 = new Sprite(835, 380, 5, 130, 's');
     arco2.visible = true;
+    arco2.collider = "none"
 
 	 // Pisos
 	 let floor1 = new Sprite(400, 1, 900, 5, 's');
-	 let floor2 = new Sprite(847, 0, 5, 600, 's');
-	 let floor3 = new Sprite(3, 0, 5, 600, 's');
+	 let floor2 = new Sprite(847, 0, 5, 900, 's');
+	 let floor3 = new Sprite(3, 0, 5, 900, 's');
 	 let floor4 = new Sprite(150, 0, 5, 600, 's');
 	 floor4.rotation = 50;
 	 let floor5 = new Sprite(700, 0, 5, 800, 's');
 	 floor5.rotation = -50;
-	 let floor6 = new Sprite(20, 297, 5, 65, 's');
-	 floor6.rotation = -65;
-	 let floor7 = new Sprite(830, 297, 5, 65, 's');
-	 floor7.rotation = 65;
+	 let floor6 = new Sprite(-7, 310, 5, 65, 's');
+	 floor6.rotation = -75;
+	 let floor7 = new Sprite(860, 310, 5, 65, 's');
+	 floor7.rotation = 75;
 	 let floor8 = new Sprite(380, 438, 1000, 2, 's');
+
+      // Obstáculos
+    obstaculo1 = new Sprite(425, 120, 100, 100,  's');
+    obstaculo1.diameter = 120
+    obstaculo1.color = 'red';
+    obstaculo2 = new Sprite(175, 150, 70, 70,  's');
+    obstaculo2.diameter = 60
+    obstaculo2.color = 'red';
+    obstaculo3 = new Sprite(675, 150, 70, 70,  's');
+    obstaculo3.diameter = 60
+    obstaculo3.color = 'red';
 
 	// Jugadores
     player1 = new Sprite(200, 350, 28, 50);
@@ -56,12 +73,12 @@ function setup() {
 	// Pelota
     pelota = new Sprite();
     pelota.diameter = 30;
-    pelota.bounciness = 0.5;
+    pelota.bounciness = 0.3;
     pelota.rotationDrag = 2;
     pelota.friction = 0.2;
     
 	// Gravedad de la pelota
-    world.gravity.y = 12;
+    world.gravity.y = 9.82;
 
     // Pausa
     
@@ -70,18 +87,22 @@ function setup() {
     pauseButton.mouseClicked(pauseGame);
     pauseButton.style('background-color', 'green');
 	
+   
+
 }
 
 function draw() {
     background('skyblue');
-	
-	if (!paused) {
+    contador();  
+    
+    if (!paused) {
         movePlayers();
         Gool();
     }
+    
     estetica();
-	
 }
+
 
 function pauseGame() {
     if (!paused) {
@@ -100,19 +121,25 @@ function pauseGame() {
 function estetica() {
     fill(255);
     textSize(24);
-    text(player1Score, 395, 475);
-    fill(255);
-    textSize(24);
-    text('-', 421, 475);
-    fill(255);
-    textSize(24);
-    text(player2Score, 440, 475);
+    textAlign(CENTER, CENTER);
+
+    // Marcadores de puntaje
+    text(player1Score, width / 2 - 50, height - 25);
+    text('-', width / 2, height - 0);
+    text(player2Score, width / 2 + 50, height - 25);
+
     fill(0);
-    textSize(24);
-    text('EQUIPO', 285, 475);
-    fill(0);
-    textSize(24);
-    text('EQUIPO', 488, 475);
+    text('EQUIPO 1', width / 4, height - 25);
+    text('EQUIPO 2', (3 * width) / 4, height - 25);
+}
+
+function contador() {
+    fill(0);  
+    textSize(24); 
+    text('Tiempo: ' + timer, width / 2, 50);
+    if (frameCount % 60 == 0 && !paused) {
+      timer++;
+    }
 }
 
 function movePlayers() {
@@ -195,4 +222,5 @@ function Gool() {
         player1Score++;
     }
 }
+
 
