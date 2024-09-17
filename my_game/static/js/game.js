@@ -1,53 +1,49 @@
 let floor;
+let walls;
 let arco1, arco2, backgroundImage;
 let player1, player2, pata1, pata2, pelota;
 let player1Score = 0;
 let player2Score = 0;
+let timer = 60;
 let paused = false;
-let pauseButton;1
-let obstaculo1;
-let obstaculo2;
-let obstaculo3;
-let timer = 0;
+let pauseButton;
+let fondo;
 
+function preload() {
+    fondo = loadImage('static/img/cancha.png');
+}
 
 function setup() {
-	new Canvas(850, 500);
+    new Canvas(850, 500);
 
     // Arcos
-    arco1 = new Sprite(15, 380, 5, 130, 's');
+    arco1 = new Sprite(30, 370, 5, 110, 's');
     arco1.visible = true;
     arco1.collider = "none"
-    arco2 = new Sprite(835, 380, 5, 130, 's');
+    arco2 = new Sprite(820, 370, 5, 110, 's');
     arco2.visible = true;
     arco2.collider = "none"
 
-	 // Pisos
-	 let floor1 = new Sprite(400, 1, 900, 5, 's');
-	 let floor2 = new Sprite(847, 0, 5, 900, 's');
-	 let floor3 = new Sprite(3, 0, 5, 900, 's');
-	 let floor4 = new Sprite(150, 0, 5, 600, 's');
-	 floor4.rotation = 50;
-	 let floor5 = new Sprite(700, 0, 5, 800, 's');
-	 floor5.rotation = -50;
-	 let floor6 = new Sprite(-7, 310, 5, 65, 's');
-	 floor6.rotation = -75;
-	 let floor7 = new Sprite(860, 310, 5, 65, 's');
-	 floor7.rotation = 75;
-	 let floor8 = new Sprite(380, 438, 1000, 2, 's');
+    // paredes  
+    let walls1 = new Sprite(400, 1, 900, 5, 's');
+    let walls2 = new Sprite(847, 0, 5, 860, 's');
+    let walls3 = new Sprite(3, 0, 5, 860, 's');
+    //palos de arriba
+    let walls4 = new Sprite(150, 0, 5, 600, 's');
+    walls4.rotation = 50;
+    let walls5 = new Sprite(700, 0, 5, 600, 's');
+    walls5.rotation = -50;
+    //arco izq
+    let walls6 = new Sprite(20, 305, 5, 65, 's');
+    walls6.rotation = -75;
+    //arco derecho
+    let walls7 = new Sprite(830, 305, 5, 65, 's');
+    walls7.rotation = 75;
+    //piso
+    let floor = new Sprite(380, 433, 1000, 2, 's');
+    floor.visible = true
 
-      // Obstáculos
-    obstaculo1 = new Sprite(425, 120, 100, 100,  's');
-    obstaculo1.diameter = 120
-    obstaculo1.color = 'red';
-    obstaculo2 = new Sprite(175, 150, 70, 70,  's');
-    obstaculo2.diameter = 60
-    obstaculo2.color = 'red';
-    obstaculo3 = new Sprite(675, 150, 70, 70,  's');
-    obstaculo3.diameter = 60
-    obstaculo3.color = 'red';
-
-	// Jugadores
+    // Jugadores
     player1 = new Sprite(200, 350, 28, 50);
     player1.friction = 0;
     player1.rotationLock = true;
@@ -59,7 +55,7 @@ function setup() {
     new GlueJoint(player1, pata1);
     new GlueJoint(player1, cabeza1);
 
-	player2 = new Sprite(600, 350, 28, 50);
+    player2 = new Sprite(600, 350, 28, 50);
     player2.friction = 0;
     player2.rotationLock = true;
     pata2 = new Sprite(580, 352, 10, 20);
@@ -70,75 +66,87 @@ function setup() {
     new GlueJoint(pata2, player2);
     new GlueJoint(cabeza2, player2);
 
-	// Pelota
+    // Pelota
     pelota = new Sprite();
     pelota.diameter = 30;
     pelota.bounciness = 0.3;
     pelota.rotationDrag = 2;
     pelota.friction = 0.2;
-    
-	// Gravedad de la pelota
+
+    // Gravedad de la pelota
     world.gravity.y = 9.82;
 
     // Pausa
-    
-	pauseButton = createButton("Pausa");
-    pauseButton.position(650,90); // Centrando el botón arriba
+    // Crear un botón circular para pausar/reanudar el juego
+    pauseButton = createButton("||");
+    pauseButton.position(1010, 478);
+    pauseButton.size(40, 40);
     pauseButton.mouseClicked(pauseGame);
-    pauseButton.style('background-color', 'green');
-	
-   
 
+    // Estilos para hacer que el botón sea circular
+    pauseButton.style('background-color', 'green');
+    pauseButton.style('border', 'none');
+    pauseButton.style('border-radius', '50%');
+    pauseButton.style('color', 'white');
+    pauseButton.style('font-size', '24px');
+    pauseButton.style('cursor', 'pointer');
 }
 
+
 function draw() {
-    background('skyblue');
-    contador();  
-    
-    if (!paused) {
+    background(fondo);
+    contador();
+
+    if (!paused && timer > 0) {
         movePlayers();
         Gool();
     }
-    
+
     estetica();
-}
-
-
-function pauseGame() {
-    if (!paused) {
-        // Pausa el juego
-        paused = true;
-        noLoop();
-        pauseButton.html("Reanudar");
-    } else {
-        // Reanuda el juego
-        paused = false;
-        loop();
-        pauseButton.html("Pausa");
-    }
 }
 
 function estetica() {
     fill(255);
     textSize(24);
-    textAlign(CENTER, CENTER);
 
     // Marcadores de puntaje
-    text(player1Score, width / 2 - 50, height - 25);
+    text(player1Score, 396, 470);
     text('-', width / 2, height - 0);
-    text(player2Score, width / 2 + 50, height - 25);
+    text(player2Score, 438, 470);
 
-    fill(0);
-    text('EQUIPO 1', width / 4, height - 25);
-    text('EQUIPO 2', (3 * width) / 4, height - 25);
+    fill(255);
+    textSize(20);
+    text('EQUIPO', 265, 470);
+    text('EQUIPO', 510, 470);
+}
+
+function pauseGame() {
+    if (!paused) {
+        paused = true;
+        noLoop();
+        pauseButton.html("▶");
+        pauseButton.style('background-color', 'red');
+    } else {
+        paused = false;
+        loop();
+        pauseButton.html("||");
+        pauseButton.style('background-color', 'green');
+    }
 }
 
 function contador() {
-    fill(0);  
-    textSize(24); 
-    text('Tiempo: ' + timer, width / 2, 50);
-    if (frameCount % 60 == 0 && !paused) {
-      timer++;
+    fill(0);
+    textSize(15);
+
+    text('00:' + timer, 405, 494);
+
+    if (frameCount % 60 == 0 && timer > 0 && !paused) {
+        timer--;
+    }
+
+    if (timer <= 0) {
+        text('Fin del juego', width / 2, height / 2);
+        noLoop();
     }
 }
 
@@ -151,7 +159,7 @@ function movePlayers() {
     } else {
         player1.vel.x = 0;
     }
-	
+
     if (kb.presses('w')) {
         player1.vel.y = -7.5;
     }
