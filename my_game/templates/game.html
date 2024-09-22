@@ -5,21 +5,104 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="favicon.png">
-    <title>p5play</title>
+    <title>p5play Game</title>
     <style>
+        /* Estilos generales para html y body */
         html,
         body {
             background-color: rgb(95, 94, 94);
-            margin: g;
+            margin: 0;
             padding: 0;
             overscroll-behavior: none;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh; /* Ocupa toda la altura de la pantalla */
+            position: relative; /* Para posicionar elementos como el scoreboard */
         }
+
+        /* Estilo para el canvas */
         canvas {
             border: 1px solid black; /* Opcional: agrega un borde para ver el canvas claramente */
+        }
+
+        /* Estilo del marcador */
+        #scoreboard {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 20px; /* Posicionado en la parte superior */
+            width: 100%;
+            color: #fff;
+            gap: 40px; /* Espacio entre elementos */
+        }
+
+        .score-text {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        #timer {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ff4747; /* Color rojo para el temporizador */
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        /* Estilo para el botón de pausa */
+        .pause-button {
+            position: absolute;
+            bottom: 70px; /* Por encima del marcador */
+            right: 20px; /* Posicionado a la derecha */
+            width: 40px;
+            height: 40px;
+            background-color: green;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Estilos para los botones del fin del juego */
+        .end-game-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 50px;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #resetButton {
+            background-color: #4CAF50; /* Fondo verde */
+        }
+
+        #menuButton {
+            background-color: #f44336; /* Fondo rojo */
+        }
+
+        /* Hover effects para botones */
+        .pause-button:hover,
+        .end-game-button:hover {
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -27,23 +110,20 @@
 <body>
     <main></main>
 
+    <!-- Contenedor del marcador y temporizador -->
+    <div id="scoreboard">
+        <div class="score-text">AZUL: <span id="player1Score">0</span></div>
+        <div id="timer">Tiempo: <span id="gameTimer">60</span></div>
+        <div class="score-text">ROJO: <span id="player2Score">0</span></div>
+    </div>
+
     <!-- ONLINE LINKS -->
     <script src="https://cdn.jsdelivr.net/npm/p5@1/lib/p5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/p5@1/lib/addons/p5.sound.min.js"></script>
-    <!-- <script src="https://q5js.org/q5.js"></script> -->
     <script src="https://p5play.org/v3/planck.min.js"></script>
     <script src="https://p5play.org/v3/p5play.js"></script>
 
-    <!-- OFFLINE LINKS -->
-    <!--
-    <script src="node_modules/p5/lib/p5.js"></script>
-    <script src="node_modules/p5/lib/addons/p5.sound.min.js"></script>
-    <script src="node_modules/q5/q5.js"></script>
-    <script src="node_modules/p5play/planck.min.js"></script>
-    <script src="node_modules/p5play/p5play.js"></script>
-    -->
-
-    <!-- YOUR SKETCH -->
+    <!-- TU SKETCH -->
     <script src="/static/js/game.js"></script>
 </body>
 

@@ -1,21 +1,21 @@
 let floor;
-let walls;
-let arco1, arco2, backgroundImage;
+let arco1, arco2, fondo;
 let player1, player2, pata1, pata2, pelota;
 let player1Score = 0;
 let player2Score = 0;
 let timer = 60;
 let paused = false;
 let pauseButton, resetButton, menuButton;
-let fondo;
 
 function preload() {
-    fondo = loadImage('static/img/cancha.png');
+    fondo = loadImage('static/img/cancha.png'); 
 }
 
 function setup() {
-    new Canvas(850, 500);
+
+    createCanvas(850, 500);
     frameRate(60);
+
     // Arcos
     arco1 = new Sprite(30, 370, 5, 110, 's');
     arco1.visible = true;
@@ -36,7 +36,7 @@ function setup() {
     walls6.rotation = -75;
     let walls7 = new Sprite(830, 305, 5, 65, 's');
     walls7.rotation = 75;
-    let floor = new Sprite(380, 433, 1000, 2, 's');
+    floor = new Sprite(380, 433, 1000, 2, 's');
     floor.visible = true;
 
     // Jugadores
@@ -71,21 +71,12 @@ function setup() {
     pelota.rotationDrag = 2;
     pelota.friction = 0.2;
 
-    // Gravedad de la pelota
     world.gravity.y = 9.82;
 
-    // Pausa
     pauseButton = createButton("||");
-    pauseButton.position(1010, 478);
-    pauseButton.size(40, 40);
+    pauseButton.id('pauseButton'); 
+    pauseButton.class('pause-button');
     pauseButton.mouseClicked(pauseGame);
-
-    pauseButton.style('background-color', 'green');
-    pauseButton.style('border', 'none');
-    pauseButton.style('border-radius', '50%');
-    pauseButton.style('color', 'white');
-    pauseButton.style('font-size', '24px');
-    pauseButton.style('cursor', 'pointer');
 }
 
 function draw() {
@@ -97,24 +88,18 @@ function draw() {
         Gool();
     }
 
-    estetica();
-
     if (timer <= 0) {
         endGame();
     }
 }
 
-function estetica() {
-    fill(255);
-    textSize(24);
-    text(player1Score, 396, 470);
-    text('-', width / 2, height - 0);
-    text(player2Score, 438, 470);
+function updateScoreboard() {
+    document.getElementById('player1Score').innerText = player1Score;
+    document.getElementById('player2Score').innerText = player2Score;
+}
 
-    fill(255);
-    textSize(20);
-    text('EQUIPO', 265, 470);
-    text('EQUIPO', 510, 470);
+function updateTimer() {
+    document.getElementById('gameTimer').innerText = timer;
 }
 
 function pauseGame() {
@@ -132,23 +117,21 @@ function pauseGame() {
 }
 
 function contador() {
-    fill(0);
-    textSize(15);
+    updateTimer();
 
-    text('00:' + timer, 405, 494);
-
-    if (frameCount % 60 == 0 && timer > 0 && !paused) {
+    if (frameCount % 60 === 0 && timer > 0 && !paused) {
         timer--;
     }
 
     if (timer <= 0) {
-        text('Fin del juego', width / 2, height / 2);
-        noLoop();
+        fill(255, 0, 0);
+        textSize(32);
+        textAlign(CENTER, CENTER);
+        text('Fin del juego', width / 2, height / 2 - 40);
     }
 }
 
 function movePlayers() {
-    // Controlar a player1
     if (kb.pressing('a')) {
         player1.vel.x = -4;
     } else if (kb.pressing('d')) {
@@ -175,7 +158,6 @@ function movePlayers() {
         }
     }
 
-    // Controlar a player2
     if (kb.pressing('4')) {
         player2.vel.x = -4;
     } else if (kb.pressing('6')) {
@@ -208,6 +190,7 @@ function Gool() {
         pelota.position.x = 400;
         pelota.position.y = 300;
         player2Score++;
+        updateScoreboard();
         resetPositions();
     }
 
@@ -215,6 +198,7 @@ function Gool() {
         pelota.position.x = 400;
         pelota.position.y = 300;
         player1Score++;
+        updateScoreboard();
         resetPositions();
     }
 }
@@ -229,49 +213,55 @@ function resetPositions() {
 }
 
 function endGame() {
+    noLoop(); 
+
+    if (!resetButton) {
+        resetButton = createButton('Restablecer');
+        resetButton.id('resetButton');
+        resetButton.class('end-game-button');
+        resetButton.position(width / 2 - 75, height / 2 + 15);
+        resetButton.mouseClicked(resetGame);
+        resetButton.parent(document.body); 
+    }
+
+    if (!menuButton) {
+        menuButton = createButton('Volver al menú');
+        menuButton.id('menuButton');
+        menuButton.class('end-game-button');
+        menuButton.position(width / 2 - 75, height / 2 + 85);
+        menuButton.mouseClicked(goToMenu);
+        menuButton.parent(document.body); 
+    }
+
     fill(255, 0, 0);
     textSize(32);
-    textAlign(CENTER);  // Centrar el texto
+    textAlign(CENTER, CENTER);
     text('Fin del juego', width / 2, height / 2 - 40);
-
-    // Botón para restablecer el juego
-    resetButton = createButton('Restablecer');
-    resetButton.position(570, height / 2 + 15);
-    resetButton.size(150, 50);
-    resetButton.style('background-color', '#4CAF50');  // Fondo verde
-    resetButton.style('border', 'none');
-    resetButton.style('border-radius', '25px');  // Bordes redondeados
-    resetButton.style('color', 'white');  // Texto en blanco
-    resetButton.style('font-size', '20px');
-    resetButton.style('cursor', 'pointer');
-    resetButton.style('text-align', 'center');
-    resetButton.mouseClicked(resetGame);
-
-    // Botón para volver al menú
-    menuButton = createButton('Volver al menú');
-    menuButton.position(570 , height / 2 + 85);
-    menuButton.size(150, 50);
-    menuButton.style('background-color', '#f44336');  // Fondo rojo
-    menuButton.style('border', 'none');
-    menuButton.style('border-radius', '25px');  // Bordes redondeados
-    menuButton.style('color', 'white');  // Texto en blanco
-    menuButton.style('font-size', '20px');
-    menuButton.style('cursor', 'pointer');
-    menuButton.style('text-align', 'center');
-    menuButton.mouseClicked(goToMenu);
 }
-
 
 function resetGame() {
     timer = 60;
     player1Score = 0;
     player2Score = 0;
+    updateScoreboard();
     resetPositions();
-    loop();  // Reiniciar el juego
-    resetButton.remove();  // Eliminar el botón
-    menuButton.remove();   // Eliminar el botón
+    loop(); 
+    paused = false;
+
+    pauseButton.html("||");
+    pauseButton.style('background-color', 'green');
+
+   
+    if (resetButton) {
+        resetButton.remove();
+        resetButton = null;
+    }
+    if (menuButton) {
+        menuButton.remove();
+        menuButton = null;
+    }
 }
 
 function goToMenu() {
-    window.location.href = 'http://127.0.0.1:5000/menu';  // Redirige al menú
+    window.location.href = 'http://127.0.0.1:5000/menu'; 
 }
