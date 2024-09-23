@@ -7,15 +7,28 @@ let timer = 60;
 let paused = false;
 let pauseButton, resetButton, menuButton;
 
+// Variables para la escala
+let originalWidth = 850;
+let originalHeight = 500;
+let scaleFactor = 1;
+
 function preload() {
     fondo = loadImage('static/img/cancha.png'); 
 }
 
 function setup() {
-
-    createCanvas(850, 500);
+    // Seleccionar el contenedor del juego
+    let gameContainer = select('#gameContainer');
+    
+    // Crear el canvas con tamaño original
+    let canvas = createCanvas(originalWidth, originalHeight);
+    canvas.parent(gameContainer); // Anidar el canvas dentro del contenedor
+    
     frameRate(60);
-
+    
+    // Inicializar la escala
+    scaleFactor = min(gameContainer.width / originalWidth, gameContainer.height / originalHeight);
+    
     // Arcos
     arco1 = new Sprite(30, 370, 5, 110, 's');
     arco1.visible = true;
@@ -73,14 +86,40 @@ function setup() {
 
     world.gravity.y = 9.82;
 
+    // Botón de pausa
     pauseButton = createButton("||");
     pauseButton.id('pauseButton'); 
     pauseButton.class('pause-button');
+    pauseButton.parent(gameContainer); // Anidar el botón dentro del contenedor
     pauseButton.mouseClicked(pauseGame);
+
+    let helpButton = createButton("?");
+    helpButton.id('helpButton'); 
+    helpButton.class('help-button');
+    helpButton.parent(gameContainer); // Anidar el botón dentro del contenedor
+    helpButton.mouseClicked(showHelp);
+}
+
+function windowResized() {
+    // Seleccionar el contenedor del juego
+    let gameContainer = select('#gameContainer');
+    
+    // Calcular el nuevo tamaño basado en el contenedor
+    let newWidth = gameContainer.width;
+    let newHeight = gameContainer.height;
+    
+    // Mantener la relación de aspecto
+    scaleFactor = min(newWidth / originalWidth, newHeight / originalHeight);
+    
+    // Redimensionar el canvas
+    resizeCanvas(originalWidth * scaleFactor, originalHeight * scaleFactor);
 }
 
 function draw() {
     background(fondo);
+    push();
+    scale(scaleFactor); // Escalar el canvas
+
     contador();
 
     if (!paused && timer > 0) {
@@ -91,6 +130,8 @@ function draw() {
     if (timer <= 0) {
         endGame();
     }
+
+    pop();
 }
 
 function updateScoreboard() {
@@ -116,6 +157,18 @@ function pauseGame() {
     }
 }
 
+function showHelp() {
+    // Aquí puedes usar un alert o un modal para mostrar las instrucciones
+    alert("Instrucciones del juego:\n\n" +
+          "Jugador 1:\n" +
+          " - Mover: A (izquierda), D (derecha), W (salto)\n" +
+          " - Golpear: G, H\n\n" +
+          "Jugador 2:\n" +
+          " - Mover: 4 (izquierda), 6 (derecha), 8 (salto)\n" +
+          " - Golpear: L, Ñ\n\n" +
+          "¡Diviértete!");
+}
+
 function contador() {
     updateTimer();
 
@@ -125,9 +178,9 @@ function contador() {
 
     if (timer <= 0) {
         fill(255, 0, 0);
-        textSize(32);
+        textSize(32 / scaleFactor); // Ajustar el tamaño del texto según la escala
         textAlign(CENTER, CENTER);
-        text('Fin del juego', width / 2, height / 2 - 40);
+        text('Fin del juego', originalWidth / 2, originalHeight / 2 - 40);
     }
 }
 
@@ -219,24 +272,26 @@ function endGame() {
         resetButton = createButton('Restablecer');
         resetButton.id('resetButton');
         resetButton.class('end-game-button');
-        resetButton.position(width / 2 - 75, height / 2 + 15);
+        resetButton.parent(select('#gameContainer'));
+        resetButton.position((originalWidth * scaleFactor) / 2 - 75, (originalHeight * scaleFactor) / 2 + 15);
         resetButton.mouseClicked(resetGame);
-        resetButton.parent(document.body); 
     }
 
     if (!menuButton) {
         menuButton = createButton('Volver al menú');
         menuButton.id('menuButton');
         menuButton.class('end-game-button');
-        menuButton.position(width / 2 - 75, height / 2 + 85);
+        menuButton.parent(select('#gameContainer'));
+        menuButton.position((originalWidth * scaleFactor) / 2 - 75, (originalHeight * scaleFactor) / 2 + 85);
         menuButton.mouseClicked(goToMenu);
-        menuButton.parent(document.body); 
     }
 
+    push();
     fill(255, 0, 0);
-    textSize(32);
+    textSize(32 / scaleFactor);
     textAlign(CENTER, CENTER);
-    text('Fin del juego', width / 2, height / 2 - 40);
+    text('Fin del juego', originalWidth / 2, originalHeight / 2 - 40);
+    pop();
 }
 
 function resetGame() {
@@ -251,7 +306,6 @@ function resetGame() {
     pauseButton.html("||");
     pauseButton.style('background-color', 'green');
 
-   
     if (resetButton) {
         resetButton.remove();
         resetButton = null;

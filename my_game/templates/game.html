@@ -13,55 +13,75 @@
             background-color: rgb(95, 94, 94);
             margin: 0;
             padding: 0;
-            overscroll-behavior: none;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh; /* Ocupa toda la altura de la pantalla */
-            position: relative; /* Para posicionar elementos como el scoreboard */
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
-        /* Estilo para el canvas */
-        canvas {
-            border: 1px solid black; /* Opcional: agrega un borde para ver el canvas claramente */
-        }
-
-        /* Estilo del marcador */
+        /* Contenedor del marcador y temporizador */
         #scoreboard {
             display: flex;
             justify-content: center;
             align-items: center;
-            position: absolute;
-            top: 20px; /* Posicionado en la parte superior */
-            width: 100%;
+            width: 60%;
+            /* Ancho reducido */
+            max-width: 800px;
+            /* Ancho máximo */
+            padding: 15px 30px;
+            /* Padding ajustado */
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Fondo semi-transparente */
             color: #fff;
-            gap: 40px; /* Espacio entre elementos */
+            gap: 30px;
+            /* Espacio entre elementos */
+            box-sizing: border-box;
+            flex-shrink: 0;
+            /* Evita que se reduzca en altura */
+            margin: 0 auto;
+            /* Elimina márgenes superiores e inferiores */
+            border-radius: 10px;
+            /* Bordes redondeados */
+            text-align: center;
         }
 
         .score-text {
             font-size: 24px;
+            /* Tamaño fijo */
             font-weight: bold;
-            padding: 10px 20px;
-            background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
-            border-radius: 10px;
-            text-align: center;
         }
 
         #timer {
-            font-size: 22px;
+            font-size: 24px;
+            /* Tamaño fijo */
             font-weight: bold;
-            color: #ff4747; /* Color rojo para el temporizador */
-            padding: 10px 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            text-align: center;
+            color: #ff4747;
+        }
+
+        /* Contenedor del juego */
+        #gameContainer {
+            position: relative;
+            width: 850px;
+            /* Ancho fijo del canvas */
+            height: 500px;
+            /* Altura fija del canvas */
+            flex-shrink: 0;
+            /* Evita que se reduzca en altura */
+        }
+
+        canvas {
+            display: block;
+            /* Elimina espacios en línea debajo del canvas */
         }
 
         /* Estilo para el botón de pausa */
         .pause-button {
             position: absolute;
-            bottom: 70px; /* Por encima del marcador */
-            right: 20px; /* Posicionado a la derecha */
+            bottom: 20px;
+            /* 20px desde la parte inferior del contenedor del juego */
+            right: 20px;
+            /* 20px desde la derecha del contenedor del juego */
             width: 40px;
             height: 40px;
             background-color: green;
@@ -73,6 +93,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .pause-button:hover {
+            background-color: darkgreen;
         }
 
         /* Estilos para los botones del fin del juego */
@@ -89,32 +114,102 @@
             font-size: 20px;
             cursor: pointer;
             margin-top: 20px;
+            transition: opacity 0.3s;
         }
 
         #resetButton {
-            background-color: #4CAF50; /* Fondo verde */
+            background-color: #4CAF50;
+            /* Fondo verde */
         }
 
         #menuButton {
-            background-color: #f44336; /* Fondo rojo */
+            background-color: #f44336;
+            /* Fondo rojo */
         }
 
         /* Hover effects para botones */
-        .pause-button:hover,
         .end-game-button:hover {
             opacity: 0.8;
+        }
+
+        /* Responsive Design: Ajustes para pantallas más pequeñas */
+        @media (max-width: 900px) {
+            #scoreboard {
+                width: 90%;
+                /* Más ancho en pantallas pequeñas */
+                padding: 10px 20px;
+                gap: 20px;
+            }
+
+            .score-text,
+            #timer {
+                font-size: 20px;
+            }
+
+            .pause-button {
+                width: 35px;
+                height: 35px;
+                font-size: 20px;
+            }
+
+            .end-game-button {
+                width: 130px;
+                height: 45px;
+                font-size: 18px;
+            }
+
+            #gameContainer {
+                width: 100%;
+                max-width: 850px;
+                height: auto;
+            }
+
+            canvas {
+                width: 100%;
+                height: auto;
+            }
+
+            .help-button {
+                position: absolute;
+                bottom: 20px;
+                /* 20px desde la parte inferior del contenedor del juego */
+                left: 20px;
+                /* 20px desde la izquierda del contenedor del juego */
+                width: 40px;
+                height: 40px;
+                background-color: blue;
+                border: none;
+                border-radius: 50%;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: background-color 0.3s;
+            }
+
+            .help-button:hover {
+                background-color: darkblue;
+            }
+
         }
     </style>
 </head>
 
 <body>
-    <main></main>
-
     <!-- Contenedor del marcador y temporizador -->
     <div id="scoreboard">
         <div class="score-text">AZUL: <span id="player1Score">0</span></div>
         <div id="timer">Tiempo: <span id="gameTimer">60</span></div>
         <div class="score-text">ROJO: <span id="player2Score">0</span></div>
+    </div>
+
+    <!-- Contenedor del juego -->
+    <div id="gameContainer">
+        <main></main>
+        <!-- Botón de pausa -->
+        <button class="pause-button">||</button>
     </div>
 
     <!-- ONLINE LINKS -->
