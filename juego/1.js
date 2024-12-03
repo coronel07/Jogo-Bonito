@@ -3,7 +3,9 @@ let arco1;
 let arco2;
 let backgroundImage;
 let player1;
+let player1_texture;
 let player2;
+let player2_texture;
 let pata1;
 let pata2;
 let pelota;
@@ -17,6 +19,8 @@ let obstaculo3;
 
 function preload() {
     backgroundImage = loadImage('image.png');
+    player1_texture = loadImage('my_game/static/img/PJ1.png');
+      
 }
 
 function setup() {
@@ -45,7 +49,7 @@ function setup() {
     player1 = new Sprite(200, 350, 28, 50);
     player1.friction = 0;
     player1.rotationLock = true;
-    player1.img = "/ROMAAAAAAN.png";
+    player1.image = player1_texture;
     let cabeza1 = new Sprite(200, 333);
     cabeza1.diameter = 28;
     cabeza1.visible = false;
@@ -57,7 +61,7 @@ function setup() {
     player2 = new Sprite(600, 350, 28, 50);
     player2.friction = 0;
     player2.rotationLock = true;
-    player2.img = "/PABLITOOOO.png";
+    player2.image = "";
     pata2 = new Sprite(580, 352, 10, 20);
     pata2.visible = false;
     let cabeza2 = new Sprite(600, 333);

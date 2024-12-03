@@ -56,6 +56,7 @@ function setup() {
     player1 = new Sprite(200, 345, 25, 50);
     player1.friction = 0;
     player1.rotationLock = true;
+    player1.image = "static/img/PJ1.png";
     let cabeza1 = new Sprite(200, 333);
     cabeza1.diameter = 28;
     cabeza1.visible = false;
@@ -68,6 +69,7 @@ function setup() {
     player2 = new Sprite(600, 350, 25, 50);
     player2.friction = 0;
     player2.rotationLock = true;
+    player2.image = "static/img/PJ2.png";
     pata2 = new Sprite(580, 365, 10, 20);
     pata2.visible = false;
     pata2.collider = 'dynamic'
@@ -79,7 +81,9 @@ function setup() {
 
     // Pelota
     pelota = new Sprite();
-    pelota.diameter = 25;
+    pelota.diameter = 220;
+    pelota.image = "static/img/FULBO.png";
+    pelota.scale = 0.25;
     pelota.bounciness = 0.3;
     pelota.rotationDrag = 2;
     pelota.friction = 0.2;

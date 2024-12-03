@@ -11,6 +11,11 @@ let player1Score = 0;
 let player2Score = 0;
 let paused = false;
 let pauseButton;
+let img;
+
+function preload() {
+    img = loadImage('my_game/static/img/PJ!');
+  }
 
 function setup() {
 	new Canvas(850, 500);
