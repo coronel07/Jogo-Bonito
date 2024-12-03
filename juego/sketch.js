@@ -31,4 +31,32 @@ function draw() {
 		ball.speed = 10;
 		ball.moveTo(mouse);
 	}
+
+
+function preload() {
+
+    player1Image = loadImage('assets/PJ1.png');
+}
+
+
+    player1 = createSprite(100, 300, 50, 50);
+
+ 
+    player1.addImage('default', player1Image);
+
+   
+    player1.scale = 0.5;
+
+    
+
+    // Controlar el movimiento de player1
+    if (keyIsDown(LEFT_ARROW)) {
+        player1.position.x -= 5;
+    }
+    if (keyIsDown(RIGHT_ARROW)) {
+        player1.position.x += 5;
+    }
+
+    // Dibujar todos los sprites
+    drawSprites();
 }
